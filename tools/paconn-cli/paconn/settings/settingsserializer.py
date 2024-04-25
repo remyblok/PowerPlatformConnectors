@@ -34,6 +34,7 @@ _CLIENT_ID = 'clientId'
 _TENANT = 'tenant'
 _AUTHORITY_URL = 'authorityUrl'
 _RESOURCE = 'resource'
+_SCOPES = 'scopes'
 
 
 # pylint: disable=too-few-public-methods
@@ -98,6 +99,7 @@ class SettingsSerializer:
             # tenant IGNORED
             # authority_url IGNORED
             # resource IGNORED
+            # scopes IGNORED
         }
 
         if settings.script is not None:
@@ -135,6 +137,7 @@ class SettingsSerializer:
             client_id=settings_dict.get(_CLIENT_ID, None),
             tenant=settings_dict.get(_TENANT, None),
             authority_url=settings_dict.get(_AUTHORITY_URL, None),
-            resource=settings_dict.get(_RESOURCE, None)
+            resource=settings_dict.get(_RESOURCE, None),
+            scopes=settings_dict.get(_SCOPES, None)
         )
         return settings

@@ -28,7 +28,7 @@ def get_authentication(settings, force_authenticate):
         profile = Profile(
             client_id=settings.client_id,
             tenant=settings.tenant,
-            resource=settings.resource,
+            scopes=settings.scopes,
             authority_url=settings.authority_url)
 
         credentials = profile.authenticate_device_code()

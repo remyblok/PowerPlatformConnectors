@@ -77,11 +77,17 @@ def load_arguments(self, command):
             required=False,
             help='Authority URL for login.')
         arg_context.argument(
+            'scopes',
+            options_list=['--scopes', '-c'],
+            type=str,
+            required=False,
+            help='Scopes for login.')
+        arg_context.argument(
             'resource',
             options_list=['--resource', '-r'],
             type=str,
             required=False,
-            help='Resource URL for login.')
+            help='Resource URL for login. Scope-argument will take precidence. Will be converted to /.default scope')
         arg_context.argument(
             SETTINGS,
             options_list=SETTINGS_OPTIONS,

@@ -32,7 +32,8 @@ class SettingsBuilder:
             client_id=None,
             tenant=None,
             authority_url=None,
-            resource=None):
+            resource=None,
+            scopes=None):
         """
         Loads settings into a settings object.
         """
@@ -53,7 +54,8 @@ class SettingsBuilder:
                 client_id=client_id,
                 tenant=tenant,
                 authority_url=authority_url,
-                resource=resource
+                resource=resource,
+                scopes=scopes
             )
         return settings
 
@@ -64,7 +66,8 @@ class SettingsBuilder:
             client_id,
             tenant,
             authority_url,
-            resource):
+            resource,
+            scopes):
         """
         Loads settings into a settings object.
         """
@@ -85,6 +88,7 @@ class SettingsBuilder:
                 client_id=client_id,
                 tenant=tenant,
                 authority_url=authority_url,
-                resource=resource
+                resource=resource,
+                scopes=scopes
             )
         return settings
