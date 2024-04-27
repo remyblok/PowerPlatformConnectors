@@ -15,6 +15,7 @@ def get_authentication(settings, force_authenticate):
     Logs the user in based on the specified settings
     """
     tokenmanager = TokenManager(settings)
+    token = None
 
     if not force_authenticate:
         token = tokenmanager.is_authenticated()

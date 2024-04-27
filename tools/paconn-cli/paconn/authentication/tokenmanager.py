@@ -14,7 +14,10 @@ import pickle
 import msal
 
 from knack.util import CLIError
+from knack.log import get_logger
 from paconn.common.util import display_message, get_config_dir
+
+LOGGER = get_logger(__name__)
 
 _TOKEN_CACHE_FILE = 'token_cache.json'
 _HTTP_CACHE_FILE = 'http_cache.bin'
@@ -45,11 +48,18 @@ class TokenManager:
         Initialize the MSAL application so it functions as singleton
         """
         if cls.__singleton_client:
+            LOGGER.debug("Reuse singleton msal application")
             return cls.__singleton_client
 
+        LOGGER.debug("Create msal application")
+        
+        #setup cache file locations
         http_cache_filepath = os.path.join(get_config_dir(), http_cache_file)
         token_cache_filepath = os.path.join(get_config_dir(), token_cache_file)
+        LOGGER.debug("http cache file path {}".format(http_cache_filepath))
+        LOGGER.debug("token cache file path {}".format(token_cache_filepath))
 
+        # Setup HTTP Cache + saving at exit
         cls.__http_cache = {}
         if os.path.exists(http_cache_filepath):
             try:
@@ -60,15 +70,14 @@ class TokenManager:
                     pickle.UnpicklingError, # A corrupted http cache file
                 ):
                 cls.__http_cache = {}  # Recover by starting afresh
-        # When exit, write http cache back to the file.
         atexit.register(lambda: pickle.dump(
             cls.__http_cache, open(http_cache_filepath, "wb")))
 
+        # Setup Token Cache + saving at exit
         token_cache = msal.SerializableTokenCache()
         if os.path.exists(token_cache_filepath):
             with open(token_cache_filepath, "r", encoding="utf-8") as f:
                 token_cache.deserialize(f.read())
-        # When exit, write token cache back to the file.
         atexit.register(lambda:
             open(token_cache_filepath, "w", encoding="utf-8")
                 .write(token_cache.serialize())
@@ -76,6 +85,7 @@ class TokenManager:
             if token_cache.has_state_changed else None
         )
 
+        # Create MSAL ClientApplication once and set as singleton 
         client = msal.PublicClientApplication(
                     settings.client_id,
                     authority=settings.authority_url,
@@ -101,6 +111,9 @@ class TokenManager:
 
     
     def list_accounts(self):
+        """
+        Get a list of all logged in accounts
+        """
         accounts = self.__client.get_accounts()
         return accounts
 
@@ -115,7 +128,7 @@ class TokenManager:
 
     def is_authenticated(self):
         """
-        returns if a valid token is available
+        Returns if any valid token is available
         """
         accounts = self.__client.get_accounts(self.__settings.username)
         if not accounts:
@@ -153,10 +166,11 @@ class TokenManager:
         """
         Returns a valid token when available.
         """
-
         if not self.__settings.username:
             raise Exception('Expected username setting to be provided')
 
+        LOGGER.debug("Acquire token silent for {}".format(self.__settings.username))
+        
         accounts = self.__client.get_accounts(self.__settings.username)
         if not accounts:
             raise CLIError('Unknown account {}. Please login again.'.format(self.__settings.username))
