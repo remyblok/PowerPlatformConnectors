@@ -51,6 +51,9 @@ SCRIPT = 'script'
 SCRIPT_OPTIONS = ['--script', '-x']
 SCRIPT_HELP = 'Location for the script file.'
 
+USERNAME = 'username'
+USERNAME_OPTIONS = ['--username', '-n']
+USERNAME_HELP = 'Username of the account you want to login to. Otherwise last logged in account will be used.'
 
 # pylint: disable=unused-argument
 def load_arguments(self, command):
@@ -103,6 +106,31 @@ def load_arguments(self, command):
             default=False,
             const=True,
             help='Override a previous login, if exists.')
+        arg_context.argument(
+            USERNAME,
+            options_list=USERNAME_OPTIONS,
+            type=str,
+            required=False,
+            help=USERNAME_HELP)
+        arg_context.argument(
+            'interactive',
+            options_list=['--interactive', '-ui'],
+            type=bool,
+            required=False,
+            nargs='?',
+            default=False,
+            const=True,
+            help='Use Interactive login in stead of the default Device Code login.')
+        arg_context.argument(
+            'disable_broker_on_windows',
+            options_list=['--disable-broker-on-windows', '-b'],
+            type=bool,
+            required=False,
+            nargs='?',
+            default=False,
+            const=True,
+            help='Disable the integration with Windows accounts on your device.')
+
 
     with ArgumentsContext(self, _DOWNLOAD) as arg_context:
         arg_context.argument(
@@ -150,6 +178,13 @@ def load_arguments(self, command):
             default=False,
             const=True,
             help='Overwrite all the existing connector and settings files.')
+        arg_context.argument(
+            USERNAME,
+            options_list=USERNAME_OPTIONS,
+            type=str,
+            required=False,
+            help=USERNAME_HELP)
+
 
     with ArgumentsContext(self, _CREATE) as arg_context:
         arg_context.argument(
@@ -215,6 +250,13 @@ def load_arguments(self, command):
             default=False,
             const=True,
             help='Overwrite the existing settings file.')
+        arg_context.argument(
+            USERNAME,
+            options_list=USERNAME_OPTIONS,
+            type=str,
+            required=False,
+            help=USERNAME_HELP)
+
 
     with ArgumentsContext(self, _UPDATE) as arg_context:
         arg_context.argument(
@@ -277,6 +319,13 @@ def load_arguments(self, command):
             type=str,
             required=False,
             help=SETTINGS_HELP)
+        arg_context.argument(
+            USERNAME,
+            options_list=USERNAME_OPTIONS,
+            type=str,
+            required=False,
+            help=USERNAME_HELP)
+
 
     with ArgumentsContext(self, _VALIDATE) as arg_context:
         arg_context.argument(
@@ -303,3 +352,10 @@ def load_arguments(self, command):
             type=str,
             required=False,
             help=SETTINGS_HELP)
+        arg_context.argument(
+            USERNAME,
+            options_list=USERNAME_OPTIONS,
+            type=str,
+            required=False,
+            help=USERNAME_HELP)
+

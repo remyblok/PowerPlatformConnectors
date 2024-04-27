@@ -9,10 +9,10 @@ Utility for loading settings.
 
 from paconn import _UPDATE, _DOWNLOAD, _VALIDATE
 from paconn.common.util import write_with_prompt
-from paconn.authentication.tokenmanager import TokenManager
+from paconn.authentication.tokenmanager import TokenManager, _USERNAME
 from paconn.apimanager.powerappsrpbuilder import PowerAppsRPBuilder
 from paconn.apimanager.flowrpbuilder import FlowRPBuilder
-from paconn.common.prompts import get_environment, get_connector_id
+from paconn.common.prompts import get_environment, get_connector_id, get_account
 from paconn.settings.settingsserializer import SettingsSerializer
 
 # Setting file name
@@ -33,11 +33,22 @@ def prompt_for_connector_id(settings, powerapps_rp):
             powerapps_rp=powerapps_rp,
             environment=settings.environment)
 
+def select_username(manager, settings):
+    # Select connector id if not provided
+    if (not hasattr(settings, 'username') or not settings.username):
+        accounts = manager.list_accounts()
+        if len(accounts) == 1:
+            settings.username = accounts[0][_USERNAME]
+        else:
+            settings.username = get_account(accounts)
 
 def load_powerapps_and_flow_rp(settings, command_context):
 
+    manager = TokenManager(settings)
+    select_username(manager, settings)
+
     # Get credentials
-    credentials = TokenManager().get_credentials()
+    credentials = manager.get_token()
 
     # Get powerapps rp
     powerapps_rp = PowerAppsRPBuilder.get_from_settings(

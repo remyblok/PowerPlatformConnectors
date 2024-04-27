@@ -9,7 +9,9 @@ Prompts the user for missing arguments
 """
 
 from knack.prompting import prompt_choice_list
+from knack.util import CLIError
 from paconn.common.util import display_message
+from paconn.authentication.tokenmanager import _USERNAME
 
 _PROPERTIES = 'properties'
 _VALUE = 'value'
@@ -60,3 +62,22 @@ def get_connector_id(powerapps_rp, environment):
     display_message('Connector selected: {}'.format(connectors_keys[sid]))
 
     return connector_id
+
+
+def get_account(accounts):
+    """
+    Prompt for username if not provided.
+    """
+    if not accounts:
+        raise CLIError('No logged in accounts. Please login first')
+
+    account_selection = [
+        acc[_USERNAME] for acc in accounts
+    ]
+    
+    sid = prompt_choice_list("Please select a user account:", account_selection)
+    selected_account = account_selection[sid]
+
+    display_message("User account selected: {}".format(selected_account))
+    return selected_account;
+

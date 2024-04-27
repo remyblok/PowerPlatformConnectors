@@ -4,14 +4,14 @@
 # license information.
 # -----------------------------------------------------------------------------
 """
-Represents a settings object consructed from settings.json
+Represents a settings object constructed from settings.json
 """
 
 
 # pylint: disable=too-few-public-methods
 class Settings:
     """
-    Represents a settings object consructed from settings.json
+    Represents a settings object constructed from settings.json
     """
     # pylint: disable=too-many-arguments
     def __init__(
@@ -30,7 +30,10 @@ class Settings:
             tenant=None,
             authority_url=None,
             resource=None,
-            scopes=None):
+            scopes=None,
+            username=None,
+            interactive_login=False,
+            disable_broker_on_windows=False):
 
         # connector specific settings
         self.connector_id = connector_id
@@ -54,10 +57,15 @@ class Settings:
 
         self.client_id = client_id or '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
         self.tenant = tenant or 'common'
-        self.authority_url = authority_url or 'https://login.microsoftonline.com/'
+        self.authority_url = authority_url or 'https://login.microsoftonline.com/' + self.tenant
+        
         if scopes:
-            self.scopes = scopes
+            self.scopes = scopes.split()
         elif resource: 
-            self.scopes = resource + "/.default"
+            self.scopes = [resource + "/.default"]
         else:
-            self.scopes = 'https://service.powerapps.com/.default'
+            self.scopes = ['https://service.powerapps.com/.default']
+            
+        self.username = username
+        self.interactive_login = interactive_login
+        self.disable_broker_on_windows = disable_broker_on_windows

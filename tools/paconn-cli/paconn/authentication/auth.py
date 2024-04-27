@@ -8,40 +8,27 @@
 Authentication methods
 """
 
-from knack.util import CLIError
-
-from paconn.authentication.profile import Profile
 from paconn.authentication.tokenmanager import TokenManager
-
 
 def get_authentication(settings, force_authenticate):
     """
-    Logs the user in and saves the token in a file.
+    Logs the user in based on the specified settings
     """
-    tokenmanager = TokenManager()
-    credentials = tokenmanager.read()
+    tokenmanager = TokenManager(settings)
 
-    token_expired = TokenManager.is_expired(credentials)
+    if not force_authenticate:
+        token = tokenmanager.is_authenticated()
 
-    # Get new token
-    if token_expired or force_authenticate:
-        profile = Profile(
-            client_id=settings.client_id,
-            tenant=settings.tenant,
-            scopes=settings.scopes,
-            authority_url=settings.authority_url)
+    if not token:
+        if settings.interactive_login:
+            token = tokenmanager.authenticate_interactive()
+        else:
+            token = tokenmanager.authenticate_with_device_code()
 
-        credentials = profile.authenticate_device_code()
-
-        tokenmanager.write(credentials)
-
-        token_expired = TokenManager.is_expired(credentials)
-
-    # Couldn't acquire valid token
-    if token_expired:
-        raise CLIError('Couldn\'t get authentication')
 
 
 def remove_authentication():
-    tokenmanager = TokenManager()
-    tokenmanager.delete_token_file()
+    """
+    Removes any cached authentication
+    """
+    TokenManager.clear_caches()

@@ -35,6 +35,9 @@ _TENANT = 'tenant'
 _AUTHORITY_URL = 'authorityUrl'
 _RESOURCE = 'resource'
 _SCOPES = 'scopes'
+_USERNAME = 'username'
+_INTERACTIVE_LOGIN = 'interactiveLogin'
+_DISABLE_BROKER_ON_WINDOWS = 'disableBrokerOnWindows'
 
 
 # pylint: disable=too-few-public-methods
@@ -86,7 +89,7 @@ class SettingsSerializer:
 
             # PowerApps RP settings
             _POWERAPPS_URL: settings.powerapps_url,
-            _POWERAPPS_API_VERSION: settings.powerapps_api_version
+            _POWERAPPS_API_VERSION: settings.powerapps_api_version,
             # powerapps_base_path IGNORED
 
             # Flow RP Settings - DO NOT WRITE
@@ -100,6 +103,11 @@ class SettingsSerializer:
             # authority_url IGNORED
             # resource IGNORED
             # scopes IGNORED
+            # username IGNORED,
+            # interactiveLogin IGNORED,
+            # disableBrokerOnWindows IGNORED
+            
+            #_USERNAME: settings.username IGNORED
         }
 
         if settings.script is not None:
@@ -138,6 +146,9 @@ class SettingsSerializer:
             tenant=settings_dict.get(_TENANT, None),
             authority_url=settings_dict.get(_AUTHORITY_URL, None),
             resource=settings_dict.get(_RESOURCE, None),
-            scopes=settings_dict.get(_SCOPES, None)
+            scopes=settings_dict.get(_SCOPES, None),
+            username=settings_dict.get(_USERNAME, None),
+            interactive_login=settings_dict.get(_INTERACTIVE_LOGIN, False),
+            disable_broker_on_windows=settings_dict.get(_DISABLE_BROKER_ON_WINDOWS, False),
         )
         return settings

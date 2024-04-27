@@ -120,6 +120,6 @@ class APIManager:
             LOGGER.debug('RESPONSE')
             LOGGER.debug(response_content)
             display_error(response_content)
-            raise CLIError(exception_str)
+            raise CLIError(exception_str) from exception
 
         return response

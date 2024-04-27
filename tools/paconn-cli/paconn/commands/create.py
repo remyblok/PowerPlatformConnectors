@@ -26,7 +26,8 @@ def create(
         powerapps_version,
         client_secret,
         settings_file,
-        overwrite_settings):
+        overwrite_settings,
+        username):
     """
     Create command.
     """
@@ -40,7 +41,8 @@ def create(
         script=script,
         connector_id=None,
         powerapps_url=powerapps_url,
-        powerapps_version=powerapps_version)
+        powerapps_version=powerapps_version,
+        username=username)
 
     powerapps_rp, _ = load_powerapps_and_flow_rp(
         settings=settings,

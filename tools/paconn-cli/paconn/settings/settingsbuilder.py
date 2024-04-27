@@ -33,7 +33,10 @@ class SettingsBuilder:
             tenant=None,
             authority_url=None,
             resource=None,
-            scopes=None):
+            scopes=None,
+            username=None,
+            interactive_login=False,
+            disable_broker_on_windows=False):
         """
         Loads settings into a settings object.
         """
@@ -55,7 +58,10 @@ class SettingsBuilder:
                 tenant=tenant,
                 authority_url=authority_url,
                 resource=resource,
-                scopes=scopes
+                scopes=scopes,
+                username=username,
+                interactive_login=interactive_login,
+                disable_broker_on_windows=disable_broker_on_windows
             )
         return settings
 
@@ -67,7 +73,10 @@ class SettingsBuilder:
             tenant,
             authority_url,
             resource,
-            scopes):
+            scopes,
+            username,
+            interactive_login,
+            disable_broker_on_windows):
         """
         Loads settings into a settings object.
         """
@@ -89,6 +98,9 @@ class SettingsBuilder:
                 tenant=tenant,
                 authority_url=authority_url,
                 resource=resource,
-                scopes=scopes
+                scopes=scopes,
+                username=username,
+                interactive_login=interactive_login,
+                disable_broker_on_windows=disable_broker_on_windows
             )
         return settings

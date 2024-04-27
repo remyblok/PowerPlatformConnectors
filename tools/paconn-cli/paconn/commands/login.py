@@ -12,7 +12,8 @@ from paconn.common.util import display_message
 from paconn.settings.settingsbuilder import SettingsBuilder
 
 
-def login(client_id, tenant, authority_url, resource, scopes, settings_file, force):
+def login(client_id, tenant, authority_url, resource, scopes, settings_file, force, username,
+          interactive, disable_broker_on_windows):
     """
     Login command.
     """
@@ -23,7 +24,10 @@ def login(client_id, tenant, authority_url, resource, scopes, settings_file, for
         tenant=tenant,
         authority_url=authority_url,
         resource=resource,
-        scopes=scopes)
+        scopes=scopes,
+        username=username,
+        interactive_login=interactive,
+        disable_broker_on_windows=disable_broker_on_windows)
 
     get_authentication(
         settings=settings,

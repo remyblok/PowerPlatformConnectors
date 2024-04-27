@@ -25,7 +25,8 @@ def update(
         powerapps_url,
         powerapps_version,
         client_secret,
-        settings_file):
+        settings_file,
+        username):
     """
     Update command.
     """
@@ -39,7 +40,8 @@ def update(
         script=script,
         connector_id=connector_id,
         powerapps_url=powerapps_url,
-        powerapps_version=powerapps_version)
+        powerapps_version=powerapps_version,
+        username=username)
 
     powerapps_rp, _ = load_powerapps_and_flow_rp(
         settings=settings,

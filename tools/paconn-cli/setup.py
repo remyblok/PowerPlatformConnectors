@@ -57,7 +57,8 @@ setup(
         'pytest-xdist',
         'virtualenv',
         'requests',
-        'msal',
+        'msal'
+        'msal[broker]'
         'msrestazure',
         'azure-storage-blob>=2.1,<12.0'
     ],
