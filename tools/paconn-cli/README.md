@@ -141,11 +141,39 @@ Log in to Power Platform by running:
    
 `paconn login`
 
-This command will ask you to log in using the device code login process. Follow the prompt for the log in. Service Principle authentication is not supported at this point. Please review [a customer workaround posted in the issues page](https://github.com/microsoft/PowerPlatformConnectors/issues/287).
+This command will ask you to log in using the device code login process. Follow the prompt for the log in. 
 
+or
+
+`paconn login -ui`
+
+This command will log you in using either Windows broker (WAM) or via the browser. Disable the broker using `--disable-broker-on-windows`.
+
+You can log in with multiple accounts. Use the `--username` option for login and for all other operations to specify the account to use.
+
+Service Principle authentication is not supported at this point. Please review [a customer workaround posted in the issues page](https://github.com/microsoft/PowerPlatformConnectors/issues/287).
+
+
+```
+Arguments
+    --authority_url -a             : Authority URL for login.
+    --clid -i                      : The client ID.
+    --disable-broker-on-windows -b : Disable the integration with Windows accounts on your device.
+    --force -f                     : Override a previous login, if exists.
+    --interactive -ui              : Use Interactive login in stead of the default Device Code
+                                     login.
+    --resource -r                  : Resource URL for login. Scope-argument will take precidence.
+                                     Will be converted to /.default scope.
+    --scopes -c                    : Scopes for login.
+    --settings -s                  : A settings file containing required parameters. When a settings
+                                     file is specified some commandline parameters are ignored.
+    --tenant -t                    : The tenant.
+    --username -n                  : Username of the account you want to login to. Otherwise last
+                                     logged in account will be used.
+```
 ### Logout
 
-Logout by running:
+Logout of all accounts by running:
    
 `paconn logout`
 
@@ -171,15 +199,17 @@ All the arguments can be also specified using a [settings.json file](#settings-f
 
 ```
 Arguments
-   --cid -c       : The custom connector ID.
-   --dest -d      : Destination directory.
-   --env -e       : Power Platform environment GUID.
-   --overwrite -w : Overwrite all the existing connector and settings files.
-   --pau -u       : Power Platform URL.
-   --pav -v       : Power Platform API version.
-   --settings -s  : A settings file containing required parameters.
-                    When a settings file is specified some command 
-                    line parameters are ignored.
+    --cid -c       : The custom connector ID.
+    --dest -d      : Destination directory. Non-existent directories will be created.
+    --env -e       : Power Platform environment ID.
+    --overwrite -w : Overwrite all the existing connector and settings files.
+    --pau -u       : Power Platform URL.
+    --pav -v       : Power Platform api version.
+    --settings -s  : A settings file containing required parameters. When a settings file is
+                     specified some commandline parameters are ignored.
+    --username -n  : Username of the account you want to login to. Otherwise last logged in account
+                     will be used.
+
 ```
 
 ### Create a New Custom Connector
@@ -200,17 +230,19 @@ When the environment isn't specified, the command will prompt for it. However, t
 
 ```
 Arguments
-   --api-def     : Location for the Open API definition JSON document.
-   --api-prop    : Location for the API properties JSON document.
-   --env -e      : Power Platform environment GUID.
-   --icon        : Location for the icon file.
-   --script -x   : Location for the script file.
-   --pau -u      : Power Platform URL.
-   --pav -v      : Power Platform API version.
-   --secret -r   : The OAuth2 client secret for the connector.
-   --settings -s : A settings file containing required parameters.
-                   When a settings file is specified some command 
-                   line parameters are ignored.
+    --api-def -d            : Location of the Open API definition JSON document.
+    --api-prop -p           : Location of the API properties JSON document.
+    --env -e                : Power Platform environment ID.
+    --icon -i               : Location for the icon file.
+    --overwrite-settings -w : Overwrite the existing settings file.
+    --pau -u                : Power Platform URL.
+    --pav -v                : Power Platform api version.
+    --script -x             : Location for the script file.
+    --secret -r             : The OAuth2 client secret for the connector.
+    --settings -s           : A settings file containing required parameters. When a settings file
+                              is specified some commandline parameters are ignored.
+    --username -n           : Username of the account you want to login to. Otherwise last logged in
+                              account will be used.
 ```
 ### Update an Existing Custom Connector
 
@@ -230,18 +262,19 @@ When environment or connector ID isn't specified, the command will prompt for th
   
 ```
 Arguments
-   --api-def     : Location for the Open API definition JSON document.
-   --api-prop    : Location for the API properties JSON document.
-   --cid -c      : The custom connector ID.
-   --env -e      : Power Platform environment GUID.
-   --icon        : Location for the icon file.
-   --script -x   : Location for the script file.
-   --pau -u      : Power Platform URL.
-   --pav -v      : Power Platform API version.
-   --secret -r   : The OAuth2 client secret for the connector.
-   --settings -s : A settings file containing required parameters.
-                   When a settings file is specified some command 
-                   line parameters are ignored.
+    --api-def -d  : Location of the Open API definition JSON document.
+    --api-prop -p : Location of the API properties JSON document.
+    --cid -c      : The custom connector ID.
+    --env -e      : Power Platform environment ID.
+    --icon -i     : Location for the icon file.
+    --pau -u      : Power Platform URL.
+    --pav -v      : Power Platform api version.
+    --script -x   : Location for the script file.
+    --secret -r   : The OAuth2 client secret for the connector.
+    --settings -s : A settings file containing required parameters. When a settings file is
+                    specified some commandline parameters are ignored.
+    --username -n : Username of the account you want to login to. Otherwise last logged in account
+                    will be used.
    ```
 
 ### Validate a Swagger JSON
@@ -258,13 +291,14 @@ The command will print the error, warning, or success message depending result o
   
 ```
 Arguments
-   --api-def     : Location for the Open API definition JSON document.
-   --pau -u      : Power Platform URL.
-   --pav -v      : Power Platform API version.
-   --settings -s : A settings file containing required parameters.
-                   When a settings file is specified some command 
-                   line parameters are ignored.
-   ```
+    --api-def -d  : Location of the Open API definition JSON document.
+    --pau -u      : Power Platform URL.
+    --pav -v      : Power Platform api version.
+    --settings -s : A settings file containing required parameters. When a settings file is
+                    specified some commandline parameters are ignored.
+    --username -n : Username of the account you want to login to. Otherwise last logged in account
+                    will be used.
+```
 
 
 ### Best Practice
