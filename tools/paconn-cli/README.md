@@ -147,17 +147,24 @@ or
 
 `paconn login -ui`
 
-This command will log you in using either Windows broker (WAM) or via the browser. Disable the broker using `--disable-broker-on-windows`.
+This command will log you in using either Windows broker on Windows or via the browser on other OSes. Disable the broker on Windows using `--disable-broker-on-windows`.
 
-You can log in with multiple accounts. Use the `--username` option for login and for all other operations to specify the account to use.
+You can log in with multiple accounts. Use the `--username` option for login to a specific account.
 
-Service Principle authentication is not supported at this point. Please review [a customer workaround posted in the issues page](https://github.com/microsoft/PowerPlatformConnectors/issues/287).
+or
+
+`paconn login --client-id [clientid] --client-secret [secret] --tenant [tenant]`
+
+This command will log you in using the specfied Service Principle registed in your own Entra ID instance. The Service Principal should be registered as application user in your Dataverse instance as disucssed [here](https://learn.microsoft.com/en-us/power-platform/admin/create-users#create-an-application-user) . 
 
 
 ```
 Arguments
     --authority_url -a             : Authority URL for login.
-    --clid -i                      : The client ID.
+    --clid --client-id -i          : ID of the application registered in Entra ID you want to use as
+                                     Service Principal for login.
+    --client-secret                : The client secret associated with the Client ID regsitered in
+                                     Entra ID.
     --disable-broker-on-windows -b : Disable the integration with Windows accounts on your device.
     --force -f                     : Override a previous login, if exists.
     --interactive -ui              : Use Interactive login in stead of the default Device Code
@@ -167,10 +174,18 @@ Arguments
     --scopes -c                    : Scopes for login.
     --settings -s                  : A settings file containing required parameters. When a settings
                                      file is specified some commandline parameters are ignored.
-    --tenant -t                    : The tenant.
-    --username -n                  : Username of the account you want to login to. Otherwise last
-                                     logged in account will be used.
+    --tenant -t                    : The tenant where the application specified by the Client ID is
+                                     registered.
+    --username -n                  : Username of the account you want to login to.
 ```
+
+User accounts will remain logged in as long as possible. Underlying tokens will be refreshed if possible to keep the login. Service principals will not remain logged in. Once the token expires (usualy after 1 hour) you need to login again.
+
+Once logged in you can execute the other operations. If logged in with one account, this account will be used automatically. If you are logged in with multiple accounts paconn will ask with account should be used, this works only for user accounts,
+with the `--account` parameter you can specify the account, either username of client id, to use for the opertions.
+
+
+
 ### Logout
 
 Logout of all accounts by running:
@@ -199,6 +214,7 @@ All the arguments can be also specified using a [settings.json file](#settings-f
 
 ```
 Arguments
+    --account -n   : Specific logged in username or client id used during execution.
     --cid -c       : The custom connector ID.
     --dest -d      : Destination directory. Non-existent directories will be created.
     --env -e       : Power Platform environment ID.
@@ -207,8 +223,6 @@ Arguments
     --pav -v       : Power Platform api version.
     --settings -s  : A settings file containing required parameters. When a settings file is
                      specified some commandline parameters are ignored.
-    --username -n  : Username of the account you want to login to. Otherwise last logged in account
-                     will be used.
 
 ```
 
@@ -230,6 +244,7 @@ When the environment isn't specified, the command will prompt for it. However, t
 
 ```
 Arguments
+    --account -n            : Specific logged in username or client id used during execution.
     --api-def -d            : Location of the Open API definition JSON document.
     --api-prop -p           : Location of the API properties JSON document.
     --env -e                : Power Platform environment ID.
@@ -241,8 +256,6 @@ Arguments
     --secret -r             : The OAuth2 client secret for the connector.
     --settings -s           : A settings file containing required parameters. When a settings file
                               is specified some commandline parameters are ignored.
-    --username -n           : Username of the account you want to login to. Otherwise last logged in
-                              account will be used.
 ```
 ### Update an Existing Custom Connector
 
@@ -262,6 +275,7 @@ When environment or connector ID isn't specified, the command will prompt for th
   
 ```
 Arguments
+    --account -n  : Specific logged in username or client id used during execution.
     --api-def -d  : Location of the Open API definition JSON document.
     --api-prop -p : Location of the API properties JSON document.
     --cid -c      : The custom connector ID.
@@ -273,8 +287,6 @@ Arguments
     --secret -r   : The OAuth2 client secret for the connector.
     --settings -s : A settings file containing required parameters. When a settings file is
                     specified some commandline parameters are ignored.
-    --username -n : Username of the account you want to login to. Otherwise last logged in account
-                    will be used.
    ```
 
 ### Validate a Swagger JSON
@@ -291,13 +303,12 @@ The command will print the error, warning, or success message depending result o
   
 ```
 Arguments
+    --account -n  : Specific logged in username or client id used during execution.
     --api-def -d  : Location of the Open API definition JSON document.
     --pau -u      : Power Platform URL.
     --pav -v      : Power Platform api version.
     --settings -s : A settings file containing required parameters. When a settings file is
                     specified some commandline parameters are ignored.
-    --username -n : Username of the account you want to login to. Otherwise last logged in account
-                    will be used.
 ```
 
 

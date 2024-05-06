@@ -53,7 +53,7 @@ SCRIPT_HELP = 'Location for the script file.'
 
 ACCOUNT = 'account'
 ACCOUNT_OPTIONS = ['--account', '-n']
-ACCOUNT_HELP = 'Specific a logged in username or client id used during execution.'
+ACCOUNT_HELP = 'Specific logged in username or client id used during execution.'
 
 # pylint: disable=unused-argument
 def load_arguments(self, command):
