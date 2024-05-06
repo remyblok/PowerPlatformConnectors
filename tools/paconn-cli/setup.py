@@ -57,10 +57,9 @@ setup(
         'pytest-xdist',
         'virtualenv',
         'requests',
-        'msal'
-        'msal[broker]'
-        'msrestazure',
-        'azure-storage-blob>=2.1,<12.0'
+        'msal',
+        'msal[broker]',
+        'PyJWT>=2.4,<3'
     ],
     extras_require={
         ":python_version<'3.0'": ['pylint~=1.9.2'],
