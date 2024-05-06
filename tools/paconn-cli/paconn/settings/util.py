@@ -7,9 +7,12 @@
 Utility for loading settings.
 """
 
+import uuid
 from paconn import _UPDATE, _DOWNLOAD, _VALIDATE
 from paconn.common.util import write_with_prompt
-from paconn.authentication.tokenmanager import TokenManager, _USERNAME
+from paconn.authentication.publictokenmanager import PublicTokenManager
+from paconn.authentication.confidentialtokenmanager import ConfidentialTokenManager
+from paconn.authentication.auth import _USERNAME
 from paconn.apimanager.powerappsrpbuilder import PowerAppsRPBuilder
 from paconn.apimanager.flowrpbuilder import FlowRPBuilder
 from paconn.common.prompts import get_environment, get_connector_id, get_account
@@ -34,20 +37,26 @@ def prompt_for_connector_id(settings, powerapps_rp):
             environment=settings.environment)
 
 def select_username(manager, settings):
-    # Select connector id if not provided
-    if (not hasattr(settings, 'username') or not settings.username):
+    # Select username if not provided
+    if (not hasattr(settings, 'account') or not settings.account):
         accounts = manager.list_accounts()
         if len(accounts) == 1:
-            settings.username = accounts[0][_USERNAME]
+            settings.account = accounts[0][_USERNAME]
         else:
-            settings.username = get_account(accounts)
+            settings.account = get_account(accounts)
 
 def load_powerapps_and_flow_rp(settings, command_context):
 
-    manager = TokenManager(settings)
-    select_username(manager, settings)
-
     # Get credentials
+    manager = None
+    
+      
+    if is_valid_uuid(settings.account):
+        manager = ConfidentialTokenManager(settings)
+    else:
+        manager = PublicTokenManager(settings)
+        select_username(manager, settings)
+    
     credentials = manager.get_token()
 
     # Get powerapps rp
@@ -93,3 +102,10 @@ def write_settings(settings, overwrite):
         mode='w',
         content=settings_json,
         overwrite=overwrite)
+
+def is_valid_uuid(val):
+    try:
+        uuid.UUID(str(val))
+        return True
+    except ValueError:
+        return False

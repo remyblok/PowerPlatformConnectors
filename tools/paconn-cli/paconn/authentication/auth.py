@@ -8,28 +8,45 @@
 Authentication methods
 """
 
-from paconn.authentication.tokenmanager import TokenManager
+from paconn.authentication.publictokenmanager import PublicTokenManager
+from paconn.authentication.confidentialtokenmanager import ConfidentialTokenManager
 
-def get_authentication(settings, force_authenticate):
+# Token specific variables
+_TOKEN_TYPE = 'token_type'
+_ACCESS_TOKEN = 'access_token'
+_EXPIRES_ON = 'expires_on'
+_OID = 'oid'
+_USERNAME = "username"
+
+def get_user_authentication(settings, force_authenticate):
     """
     Logs the user in based on the specified settings
     """
-    tokenmanager = TokenManager(settings)
-    token = None
+    tokenmanager = PublicTokenManager(settings)
+    hasToken = False
 
     if not force_authenticate:
-        token = tokenmanager.is_authenticated()
+        hasToken = tokenmanager.is_authenticated()
 
-    if not token:
+    if not hasToken:
         if settings.interactive_login:
-            token = tokenmanager.authenticate_interactive()
+            tokenmanager.authenticate_interactive()
         else:
-            token = tokenmanager.authenticate_with_device_code()
+            tokenmanager.authenticate_with_device_code()
 
+    return tokenmanager.list_accounts()
+
+def get_app_authentication(settings):
+    """
+    Login using app credentials
+    """
+    tokenmanager = ConfidentialTokenManager(settings)
+    tokenmanager.authenticate_application()
 
 
 def remove_authentication():
     """
     Removes any cached authentication
     """
-    TokenManager.clear_caches()
+    PublicTokenManager.clear_caches()
+    ConfidentialTokenManager.clear_caches()

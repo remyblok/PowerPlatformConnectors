@@ -25,7 +25,9 @@
     <Compile Include="paconn\apimanager\powerappsrpbuilder.py" />
     <Compile Include="paconn\apimanager\__init__.py" />
     <Compile Include="paconn\authentication\auth.py" />
-    <Compile Include="paconn\authentication\tokenmanager.py" />
+    <Compile Include="paconn\authentication\confidentialtokenmanager.py" />
+    <Compile Include="paconn\authentication\tokenmanagerbase.py" />
+    <Compile Include="paconn\authentication\publictokenmanager.py" />
     <Compile Include="paconn\authentication\__init__.py" />
     <Compile Include="paconn\commands\commands.py" />
     <Compile Include="paconn\commands\logout.py" />

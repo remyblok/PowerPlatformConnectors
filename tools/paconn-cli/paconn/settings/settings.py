@@ -27,13 +27,15 @@ class Settings:
             flow_url=None,
             flow_api_version=None,
             client_id=None,
+            client_secret=None,
             tenant=None,
             authority_url=None,
             resource=None,
             scopes=None,
             username=None,
             interactive_login=False,
-            disable_broker_on_windows=False):
+            disable_broker_on_windows=False,
+            account=None):
 
         # connector specific settings
         self.connector_id = connector_id
@@ -56,6 +58,7 @@ class Settings:
         self.flow_base_path = 'providers/Microsoft.ProcessSimple'          # Constant
 
         self.client_id = client_id or '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
+        self.client_secret = client_secret
         self.tenant = tenant or 'common'
         self.authority_url = authority_url or 'https://login.microsoftonline.com/' + self.tenant
         
@@ -69,3 +72,5 @@ class Settings:
         self.username = username
         self.interactive_login = interactive_login
         self.disable_broker_on_windows = disable_broker_on_windows
+        
+        self.account = account

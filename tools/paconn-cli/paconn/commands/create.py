@@ -24,10 +24,10 @@ def create(
         script,
         powerapps_url,
         powerapps_version,
-        client_secret,
+        oauth_secret,
         settings_file,
         overwrite_settings,
-        username):
+        account):
     """
     Create command.
     """
@@ -42,7 +42,7 @@ def create(
         connector_id=None,
         powerapps_url=powerapps_url,
         powerapps_version=powerapps_version,
-        username=username)
+        account=account)
 
     powerapps_rp, _ = load_powerapps_and_flow_rp(
         settings=settings,
@@ -51,7 +51,7 @@ def create(
     connector_id = upsert(
         powerapps_rp=powerapps_rp,
         settings=settings,
-        client_secret=client_secret,
+        client_secret=oauth_secret,
         is_update=False,
         overwrite_settings=overwrite_settings)
 

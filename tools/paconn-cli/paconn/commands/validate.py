@@ -21,7 +21,7 @@ def validate(
         powerapps_url,
         powerapps_version,
         settings_file,
-        username):
+        account):
     """
     Validate command.
     """
@@ -36,7 +36,7 @@ def validate(
         connector_id=None,
         powerapps_url=powerapps_url,
         powerapps_version=powerapps_version,
-        username=username)
+        account=account)
 
     powerapps_rp, _ = load_powerapps_and_flow_rp(
         settings=settings,

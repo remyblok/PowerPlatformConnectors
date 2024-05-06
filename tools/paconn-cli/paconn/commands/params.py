@@ -11,9 +11,9 @@ CLI parameter definitions
 from knack.arguments import ArgumentsContext
 from paconn import _LOGIN, _DOWNLOAD, _CREATE, _UPDATE, _VALIDATE
 
-CLIENT_SECRET = 'client_secret'
-CLIENT_SECRET_OPTIONS = ['--secret', '-r']
-CLIENT_SECRET_HELP = 'The OAuth2 client secret for the connector.'
+OAUTH_SECRET = 'oauth_secret'
+OAUTH_SECRET_OPTIONS = ['--secret', '-r']
+OAUTH_SECRET_HELP = 'The OAuth2 client secret for the connector.'
 
 ENVIRONMENT = 'environment'
 ENVIRONMENT_OPTIONS = ['--env', '-e']
@@ -51,9 +51,9 @@ SCRIPT = 'script'
 SCRIPT_OPTIONS = ['--script', '-x']
 SCRIPT_HELP = 'Location for the script file.'
 
-USERNAME = 'username'
-USERNAME_OPTIONS = ['--username', '-n']
-USERNAME_HELP = 'Username of the account you want to login to. Otherwise last logged in account will be used.'
+ACCOUNT = 'account'
+ACCOUNT_OPTIONS = ['--account', '-n']
+ACCOUNT_HELP = 'Specific a logged in username or client id used during execution.'
 
 # pylint: disable=unused-argument
 def load_arguments(self, command):
@@ -63,16 +63,22 @@ def load_arguments(self, command):
     with ArgumentsContext(self, _LOGIN) as arg_context:
         arg_context.argument(
             'client_id',
-            options_list=['--clid', '-i'],
+            options_list=['--client-id', '--clid', '-i'],
             type=str,
             required=False,
-            help='The client ID.')
+            help='ID of the application registered in Entra ID you want to use as Service Principal for login.')
+        arg_context.argument(
+            'client_secret',
+            options_list=['--client-secret'],
+            type=str,
+            required=False,
+            help='The client secret associated with the Client ID regsitered in Entra ID.')
         arg_context.argument(
             'tenant',
             options_list=['--tenant', '-t'],
             type=str,
             required=False,
-            help='The tenant.')
+            help='The tenant where the application specified by the Client ID is registered.')
         arg_context.argument(
             'authority_url',
             options_list=['--authority_url', '-a'],
@@ -107,11 +113,11 @@ def load_arguments(self, command):
             const=True,
             help='Override a previous login, if exists.')
         arg_context.argument(
-            USERNAME,
-            options_list=USERNAME_OPTIONS,
+            'username',
+            options_list=['--username', '-n'],
             type=str,
             required=False,
-            help=USERNAME_HELP)
+            help='Username of the account you want to login to')
         arg_context.argument(
             'interactive',
             options_list=['--interactive', '-ui'],
@@ -179,11 +185,11 @@ def load_arguments(self, command):
             const=True,
             help='Overwrite all the existing connector and settings files.')
         arg_context.argument(
-            USERNAME,
-            options_list=USERNAME_OPTIONS,
+            ACCOUNT,
+            options_list=ACCOUNT_OPTIONS,
             type=str,
             required=False,
-            help=USERNAME_HELP)
+            help=ACCOUNT_HELP)
 
 
     with ArgumentsContext(self, _CREATE) as arg_context:
@@ -230,11 +236,11 @@ def load_arguments(self, command):
             required=False,
             help=POWERAPPS_VERSION_HELP)
         arg_context.argument(
-            CLIENT_SECRET,
-            options_list=CLIENT_SECRET_OPTIONS,
+            OAUTH_SECRET,
+            options_list=OAUTH_SECRET_OPTIONS,
             type=str,
             required=False,
-            help=CLIENT_SECRET_HELP)
+            help=OAUTH_SECRET_HELP)
         arg_context.argument(
             SETTINGS,
             options_list=SETTINGS_OPTIONS,
@@ -251,11 +257,11 @@ def load_arguments(self, command):
             const=True,
             help='Overwrite the existing settings file.')
         arg_context.argument(
-            USERNAME,
-            options_list=USERNAME_OPTIONS,
+            ACCOUNT,
+            options_list=ACCOUNT_OPTIONS,
             type=str,
             required=False,
-            help=USERNAME_HELP)
+            help=ACCOUNT_HELP)
 
 
     with ArgumentsContext(self, _UPDATE) as arg_context:
@@ -308,11 +314,11 @@ def load_arguments(self, command):
             required=False,
             help=POWERAPPS_VERSION_HELP)
         arg_context.argument(
-            CLIENT_SECRET,
-            options_list=CLIENT_SECRET_OPTIONS,
+            OAUTH_SECRET,
+            options_list=OAUTH_SECRET_OPTIONS,
             type=str,
             required=False,
-            help=CLIENT_SECRET_HELP)
+            help=OAUTH_SECRET_HELP)
         arg_context.argument(
             SETTINGS,
             options_list=SETTINGS_OPTIONS,
@@ -320,11 +326,11 @@ def load_arguments(self, command):
             required=False,
             help=SETTINGS_HELP)
         arg_context.argument(
-            USERNAME,
-            options_list=USERNAME_OPTIONS,
+            ACCOUNT,
+            options_list=ACCOUNT_OPTIONS,
             type=str,
             required=False,
-            help=USERNAME_HELP)
+            help=ACCOUNT_HELP)
 
 
     with ArgumentsContext(self, _VALIDATE) as arg_context:
@@ -353,9 +359,9 @@ def load_arguments(self, command):
             required=False,
             help=SETTINGS_HELP)
         arg_context.argument(
-            USERNAME,
-            options_list=USERNAME_OPTIONS,
+            ACCOUNT,
+            options_list=ACCOUNT_OPTIONS,
             type=str,
             required=False,
-            help=USERNAME_HELP)
+            help=ACCOUNT_HELP)
 

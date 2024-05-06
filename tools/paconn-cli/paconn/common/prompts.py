@@ -11,7 +11,7 @@ Prompts the user for missing arguments
 from knack.prompting import prompt_choice_list
 from knack.util import CLIError
 from paconn.common.util import display_message
-from paconn.authentication.tokenmanager import _USERNAME
+from paconn.authentication.auth import _USERNAME
 
 _PROPERTIES = 'properties'
 _VALUE = 'value'

@@ -31,6 +31,7 @@ _SCRIPT = 'script'
 
 # Authentication settings
 _CLIENT_ID = 'clientId'
+_CLIENT_SECRET = 'clientSecret'
 _TENANT = 'tenant'
 _AUTHORITY_URL = 'authorityUrl'
 _RESOURCE = 'resource'
@@ -38,6 +39,7 @@ _SCOPES = 'scopes'
 _USERNAME = 'username'
 _INTERACTIVE_LOGIN = 'interactiveLogin'
 _DISABLE_BROKER_ON_WINDOWS = 'disableBrokerOnWindows'
+_ACCOUNT = 'account'
 
 
 # pylint: disable=too-few-public-methods
@@ -99,6 +101,7 @@ class SettingsSerializer:
 
             # Authentication Settings - DO NOT WRITE
             # client_id IGNORED
+            # client_secret IGNORED
             # tenant IGNORED
             # authority_url IGNORED
             # resource IGNORED
@@ -106,8 +109,9 @@ class SettingsSerializer:
             # username IGNORED,
             # interactiveLogin IGNORED,
             # disableBrokerOnWindows IGNORED
+            # username IGNORED
             
-            #_USERNAME: settings.username IGNORED
+            _ACCOUNT: settings.account
         }
 
         if settings.script is not None:
@@ -143,6 +147,7 @@ class SettingsSerializer:
 
             # Authentication Settings
             client_id=settings_dict.get(_CLIENT_ID, None),
+            client_secret=settings_dict.get(_CLIENT_SECRET, None),
             tenant=settings_dict.get(_TENANT, None),
             authority_url=settings_dict.get(_AUTHORITY_URL, None),
             resource=settings_dict.get(_RESOURCE, None),
@@ -150,5 +155,7 @@ class SettingsSerializer:
             username=settings_dict.get(_USERNAME, None),
             interactive_login=settings_dict.get(_INTERACTIVE_LOGIN, False),
             disable_broker_on_windows=settings_dict.get(_DISABLE_BROKER_ON_WINDOWS, False),
+            
+            account= settings_dict.get(_ACCOUNT, None),
         )
         return settings
