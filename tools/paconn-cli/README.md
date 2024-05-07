@@ -111,7 +111,8 @@ Instead of providing the arguments in the command line, a `settings.json` file c
   "icon": "icon.png",
   "script": "script.csx",
   "powerAppsApiVersion": "2016-11-01",
-  "powerAppsUrl": "https://api.powerapps.com"
+  "powerAppsUrl": "https://api.powerapps.com",
+  "account": "ACCOUNT-NAME-OR-CLIENT-ID"
 }
 ```
 
@@ -132,6 +133,8 @@ In the settings file, the following items are expected. If an option is missing 
 * `powerAppsUrl`: The API URL for Power Apps. This parameter is optional and set to `https://api.powerapps.com` by default.
 
 * `powerAppsApiVersion`: The API version to use for Power Apps. This parameter is optional and set to `2016-11-01` by default.
+
+* `account`: The account that should be used to login at Power Apps. Can be a UPN/email adress for a user account, or the client id of a Service Principal.
 
 ## Command-Line Operations
 
@@ -181,10 +184,9 @@ Arguments
 
 User accounts will remain logged in as long as possible. Underlying tokens will be refreshed if possible to keep the login. Service principals will not remain logged in. Once the token expires (usualy after 1 hour) you need to login again.
 
-Once logged in you can execute the other operations. If logged in with one account, this account will be used automatically. If you are logged in with multiple accounts paconn will ask with account should be used, this works only for user accounts,
-with the `--account` parameter you can specify the account, either username of client id, to use for the opertions.
+Once logged in you can execute the other operations. If logged in with one account, this account will be used automatically. If you are logged in with multiple accounts the command will prompt which account should be used. 
 
-
+If you are logged in with multiple accounts you can use the `--account` parameter to specify the account, either username of client id, to use for the opertions. This can also be supplied via `settings.json`.
 
 ### Logout
 
@@ -223,7 +225,6 @@ Arguments
     --pav -v       : Power Platform api version.
     --settings -s  : A settings file containing required parameters. When a settings file is
                      specified some commandline parameters are ignored.
-
 ```
 
 ### Create a New Custom Connector
@@ -287,7 +288,7 @@ Arguments
     --secret -r   : The OAuth2 client secret for the connector.
     --settings -s : A settings file containing required parameters. When a settings file is
                     specified some commandline parameters are ignored.
-   ```
+```
 
 ### Validate a Swagger JSON
 
