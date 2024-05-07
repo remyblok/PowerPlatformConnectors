@@ -57,7 +57,8 @@ class Settings:
         self.flow_api_version = flow_api_version or '2016-11-01'
         self.flow_base_path = 'providers/Microsoft.ProcessSimple'          # Constant
 
-        self.client_id = client_id or '04b07795-8ddb-461a-bbee-02f9e1bf7b46'
+        #self.client_id = client_id or '04b07795-8ddb-461a-bbee-02f9e1bf7b46' # App ID of Microsoft Azure Cross-platform Command Line Interface
+        self.client_id = client_id or '9cee029c-6210-4654-90bb-17e6e9d36617' # App ID of Power Platform CLI - pac
         self.client_secret = client_secret
         self.tenant = tenant or 'common'
         self.authority_url = authority_url or 'https://login.microsoftonline.com/' + self.tenant
