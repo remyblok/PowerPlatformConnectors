@@ -10,13 +10,15 @@ Authentication methods
 
 from paconn.authentication.publictokenmanager import PublicTokenManager
 from paconn.authentication.confidentialtokenmanager import ConfidentialTokenManager
+from paconn.authentication.tokencachemanager import TokenCacheManager
 
 # Token specific variables
 _TOKEN_TYPE = 'token_type'
 _ACCESS_TOKEN = 'access_token'
 _EXPIRES_ON = 'expires_on'
 _OID = 'oid'
-_USERNAME = "username"
+_USERNAME = 'username'
+_CLIENT_ID = 'client_id'
 
 def get_user_authentication(settings, force_authenticate):
     """
@@ -48,5 +50,4 @@ def remove_authentication():
     """
     Removes any cached authentication
     """
-    PublicTokenManager.clear_caches()
-    ConfidentialTokenManager.clear_caches()
+    TokenCacheManager.clear_caches()

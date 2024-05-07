@@ -12,35 +12,24 @@ import msal
 
 from knack.util import CLIError
 from knack.log import get_logger
-from paconn.authentication.tokenmanagerbase import TokenManagerBase
+from paconn.authentication.tokencachemanager import TokenCacheManager
 from paconn.common.util import display_message
 
 LOGGER = get_logger(__name__)
 
-_TOKEN_CACHE_FILE = 'public_token_cache.json'
-_HTTP_CACHE_FILE = 'public_http_cache.bin'
-
-class PublicTokenManager(TokenManagerBase):
+class PublicTokenManager:
     """
     Class to manager login token.
     """
 
     def __init__(self, settings):
         self.__settings = settings
-        self.__client = super()._initialize_msal_application(
-            _TOKEN_CACHE_FILE,
-            _HTTP_CACHE_FILE,
-            lambda token_cache, http_cache : msal.PublicClientApplication(
+        self.__client = msal.PublicClientApplication(
                     settings.client_id,
                     authority=settings.authority_url,
                     enable_broker_on_windows=not settings.disable_broker_on_windows,
-                    token_cache=token_cache,
-                    http_cache=http_cache)
-        )
-
-    @classmethod
-    def clear_caches(cls):
-        super()._clear_caches(_TOKEN_CACHE_FILE, _HTTP_CACHE_FILE)
+                    token_cache=TokenCacheManager.get_token_cache(),
+                    http_cache=TokenCacheManager.get_http_cache())
 
     
     def list_accounts(self):
@@ -56,7 +45,7 @@ class PublicTokenManager(TokenManagerBase):
         Returns a valid token when available, or exception.
         """
         token = self.__authenticate_cached()
-        return super()._validate_token(token)
+        return TokenCacheManager.validate_token(token)
 
 
     def is_authenticated(self):
@@ -80,7 +69,7 @@ class PublicTokenManager(TokenManagerBase):
         display_message(flow['message'], flush=True)
 
         token = self.__client.acquire_token_by_device_flow(flow)
-        super()._validate_token(token)
+        TokenCacheManager.validate_token(token)
 
 
     def authenticate_interactive(self):
@@ -92,7 +81,7 @@ class PublicTokenManager(TokenManagerBase):
             domain_hint=self.__settings.tenant,
             login_hint=self.__settings.username,
             parent_window_handle=self.__client.CONSOLE_WINDOW_HANDLE)
-        super()._validate_token(token)
+        TokenCacheManager.validate_token(token)
 
 
     def __authenticate_cached(self):
