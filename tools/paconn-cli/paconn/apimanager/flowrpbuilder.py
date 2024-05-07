@@ -17,6 +17,7 @@ class FlowRPBuilder:
     """
     A builder class to create a FlowRP object
     """
+    @staticmethod
     def get_from_settings(credentials, settings):
         """
         Returns flow rp object from a given settings and credentials.

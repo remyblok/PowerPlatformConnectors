@@ -8,40 +8,46 @@
 Authentication methods
 """
 
-from knack.util import CLIError
+from paconn.authentication.publictokenmanager import PublicTokenManager
+from paconn.authentication.confidentialtokenmanager import ConfidentialTokenManager
+from paconn.authentication.tokencachemanager import TokenCacheManager
 
-from paconn.authentication.profile import Profile
-from paconn.authentication.tokenmanager import TokenManager
+# Token specific variables
+_TOKEN_TYPE = 'token_type'
+_ACCESS_TOKEN = 'access_token'
+_EXPIRES_ON = 'expires_on'
+_OID = 'oid'
+_USERNAME = 'username'
+_CLIENT_ID = 'client_id'
 
-
-def get_authentication(settings, force_authenticate):
+def get_user_authentication(settings, force_authenticate):
     """
-    Logs the user in and saves the token in a file.
+    Logs the user in based on the specified settings
     """
-    tokenmanager = TokenManager()
-    credentials = tokenmanager.read()
+    tokenmanager = PublicTokenManager(settings)
+    hasToken = False
 
-    token_expired = TokenManager.is_expired(credentials)
+    if not force_authenticate:
+        hasToken = tokenmanager.is_authenticated()
 
-    # Get new token
-    if token_expired or force_authenticate:
-        profile = Profile(
-            client_id=settings.client_id,
-            tenant=settings.tenant,
-            resource=settings.resource,
-            authority_url=settings.authority_url)
+    if not hasToken:
+        if settings.interactive_login:
+            tokenmanager.authenticate_interactive()
+        else:
+            tokenmanager.authenticate_with_device_code()
 
-        credentials = profile.authenticate_device_code()
+    return tokenmanager.list_accounts()
 
-        tokenmanager.write(credentials)
-
-        token_expired = TokenManager.is_expired(credentials)
-
-    # Couldn't acquire valid token
-    if token_expired:
-        raise CLIError('Couldn\'t get authentication')
+def get_app_authentication(settings):
+    """
+    Login using app credentials
+    """
+    tokenmanager = ConfidentialTokenManager(settings)
+    tokenmanager.authenticate_application()
 
 
 def remove_authentication():
-    tokenmanager = TokenManager()
-    tokenmanager.delete_token_file()
+    """
+    Removes any cached authentication
+    """
+    TokenCacheManager.clear_caches()

@@ -11,12 +11,13 @@ A manager class for the API calls
 import json
 from urllib.parse import urljoin, urlencode, urlunparse, quote
 import requests
+import jwt
 
 from knack.util import CLIError
 from knack.log import get_logger
 
 from paconn.common.util import display_error, format_json
-from paconn.authentication.tokenmanager import (
+from paconn.authentication.auth import (
     _ACCESS_TOKEN,
     _TOKEN_TYPE,
     _OID
@@ -50,7 +51,8 @@ class APIManager:
         """
         Add object id to a given api endpoint
         """
-        object_id = self.credentials.get(_OID, '')
+        token = jwt.decode(self.credentials[_ACCESS_TOKEN], options={"verify_signature": False, "require": [_OID]})
+        object_id = token[_OID]
         path = 'objectIds/{object_id}/{api}'.format(
             object_id=object_id,
             api=api)
@@ -120,6 +122,6 @@ class APIManager:
             LOGGER.debug('RESPONSE')
             LOGGER.debug(response_content)
             display_error(response_content)
-            raise CLIError(exception_str)
+            raise CLIError(exception_str) from exception
 
         return response

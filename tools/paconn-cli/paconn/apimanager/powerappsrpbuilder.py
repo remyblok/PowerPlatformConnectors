@@ -17,6 +17,7 @@ class PowerAppsRPBuilder:
     """
     A builder class to create a PowerAppsRP object
     """
+    @staticmethod
     def get_from_settings(credentials, settings):
         """
         Returns powerapps rp object from a given settings and credentials.

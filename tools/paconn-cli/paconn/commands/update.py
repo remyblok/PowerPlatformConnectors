@@ -24,8 +24,9 @@ def update(
         connector_id,
         powerapps_url,
         powerapps_version,
-        client_secret,
-        settings_file):
+        oauth_secret,
+        settings_file,
+        account):
     """
     Update command.
     """
@@ -39,7 +40,8 @@ def update(
         script=script,
         connector_id=connector_id,
         powerapps_url=powerapps_url,
-        powerapps_version=powerapps_version)
+        powerapps_version=powerapps_version,
+        account=account)
 
     powerapps_rp, _ = load_powerapps_and_flow_rp(
         settings=settings,
@@ -48,7 +50,7 @@ def update(
     connector_id = upsert(
         powerapps_rp=powerapps_rp,
         settings=settings,
-        client_secret=client_secret,
+        client_secret=oauth_secret,
         is_update=True,
         overwrite_settings=False)
 

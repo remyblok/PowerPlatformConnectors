@@ -24,7 +24,8 @@ def download(
         powerapps_url,
         powerapps_version,
         settings_file,
-        overwrite):
+        overwrite,
+        account):
     """
     Download command.
     """
@@ -38,7 +39,8 @@ def download(
         script=None,
         connector_id=connector_id,
         powerapps_url=powerapps_url,
-        powerapps_version=powerapps_version)
+        powerapps_version=powerapps_version,
+        account=account)
 
     powerapps_rp, _ = load_powerapps_and_flow_rp(
         settings=settings,

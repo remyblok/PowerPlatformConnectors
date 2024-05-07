@@ -22,11 +22,11 @@ def get_config_dir():
     return os.path.expanduser(os.path.join('~', '.{}'.format(__CLI_NAME__)))
 
 
-def display_error(errorMessage):
+def display_error(error_message):
     """
     Displays the message to stderr stream.
     """
-    print(errorMessage, file=sys.stderr)
+    print(error_message, file=sys.stderr)
 
 
 def display_message(message, flush=False):

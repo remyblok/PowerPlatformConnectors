@@ -30,9 +30,15 @@ class SettingsBuilder:
             icon,
             script,
             client_id=None,
+            client_secret=None,
             tenant=None,
             authority_url=None,
-            resource=None):
+            resource=None,
+            scopes=None,
+            username=None,
+            interactive_login=False,
+            disable_broker_on_windows=False,
+            account=None):
         """
         Loads settings into a settings object.
         """
@@ -40,6 +46,8 @@ class SettingsBuilder:
         # Load from settings file if it is available
         if settings_file:
             settings = SettingsSerializer.from_json(settings_file)
+            if account:
+                settings.account = account
         else:
             settings = Settings(
                 connector_id=connector_id,
@@ -51,9 +59,15 @@ class SettingsBuilder:
                 icon=icon,
                 script=script,
                 client_id=client_id,
+                client_secret=client_secret,
                 tenant=tenant,
                 authority_url=authority_url,
-                resource=resource
+                resource=resource,
+                scopes=scopes,
+                username=username,
+                interactive_login=interactive_login,
+                disable_broker_on_windows=disable_broker_on_windows,
+                account=account
             )
         return settings
 
@@ -62,9 +76,14 @@ class SettingsBuilder:
     def get_authentication_settings(
             settings_file,
             client_id,
+            client_secret,
             tenant,
             authority_url,
-            resource):
+            resource,
+            scopes,
+            username,
+            interactive_login,
+            disable_broker_on_windows):
         """
         Loads settings into a settings object.
         """
@@ -82,9 +101,15 @@ class SettingsBuilder:
                 api_definition=None,
                 icon=None,
                 script=None,
+                account=None,
                 client_id=client_id,
+                client_secret=client_secret,
                 tenant=tenant,
                 authority_url=authority_url,
-                resource=resource
+                resource=resource,
+                scopes=scopes,
+                username=username,
+                interactive_login=interactive_login,
+                disable_broker_on_windows=disable_broker_on_windows
             )
         return settings
